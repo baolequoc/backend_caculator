@@ -1,6 +1,5 @@
-const { authJwt, returnHistory } = require("../middleware");
-const controller = require("../controllers/user.controller");
-
+const { authJwt } = require("../middleware");
+const controller = require("../controllers/data.controller");
 module.exports = function(app) {
   app.use(function(req, res, next) {
     res.header(
@@ -10,27 +9,31 @@ module.exports = function(app) {
     next();
   });
 
-  app.get("/api/test/all", controller.allAccess);
+  app.post("/api/savedata", [authJwt.verifyToken],controller.saveData);
 
   app.post("/api/getdata", controller.exportData);
 
-  app.get("/api/getdata", [authJwt.verifyToken,returnHistory], controller.getData);
+  app.get("/api/getdata", [authJwt.verifyToken], controller.getData);
 
-  app.get(
-    "/api/test/user",
-    [authJwt.verifyToken],
-    controller.userBoard
-  );
 
-  app.get(
-    "/api/test/mod",
-    [authJwt.verifyToken, authJwt.isModerator],
-    controller.moderatorBoard
-  );
 
-  app.get(
-    "/api/test/admin",
-    [authJwt.verifyToken, authJwt.isAdmin],
-    controller.adminBoard
-  );
+  // app.get("/api/test/all", controller.allAccess);
+  
+  // app.get(
+  //   "/api/test/user",
+  //   [authJwt.verifyToken],
+  //   controller.userBoard
+  // );
+
+  // app.get(
+  //   "/api/test/mod",
+  //   [authJwt.verifyToken, authJwt.isModerator],
+  //   controller.moderatorBoard
+  // );
+
+  // app.get(
+  //   "/api/test/admin",
+  //   [authJwt.verifyToken, authJwt.isAdmin],
+  //   controller.adminBoard
+  // );
 };
